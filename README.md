@@ -1,8 +1,8 @@
 # esbuild federation example
 
-The SSR will not happen on the host but in the federated module NodeJS application, serialised HTML is being sent back over fetch to the host NodeJS app which will parse it back to react and send it back to the browser for hydration. 
+In this example SSR will not happen all on the host (as classic module-federation-ssr) but in the federated module NodeJS application, serialised HTML is being sent back over fetch to the host NodeJS app which will parse it back to react and send it back to the browser for hydration. 
 
-this way SST can be offloaded to a number of enterprise servers.
+this way SSR can be offloaded to a number of enterprise servers.
 
 ![offloaded ssr](diagram.png?raw=true "Diagram")
 
