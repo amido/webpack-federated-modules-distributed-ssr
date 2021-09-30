@@ -4,7 +4,7 @@ In this example SSR will not happen all on the host (as classic module-federatio
 
 this way SSR can be offloaded to a number of enterprise servers.
 
-![offloaded ssr](diagram.png?raw=true "Diagram")
+<img src="diagram.png" width="1000">
 
 ## Running
 
