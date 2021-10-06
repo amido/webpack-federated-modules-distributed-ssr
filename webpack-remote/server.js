@@ -1,8 +1,5 @@
 const React = require("react");
-const {
-  pipeToNodeWritable,
-  renderToStaticMarkup,
-} = require("react-dom/server");
+const { pipeToNodeWritable } = require("react-dom/server");
 
 const { json } = require("body-parser");
 const cors = require("cors");
