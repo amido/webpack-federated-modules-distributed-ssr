@@ -13,16 +13,15 @@ function getClientComponent(ctx, remote, module, shareScope) {
   let Component = ctx[remote][module];
 
   if (!Component) {
-    Component = ctx[remote][module] = lazy(() =>
-      // initSharing(shareScope)
-        // .then(() => window[remote].init(shareScopes[shareScope]))
-        __webpack_init_sharing__(shareScope)
-          // .then(() => window[remote].init(__webpack_share_scopes__[shareScope]))
-        .then(() => window[remote].get(module))
-        .then((factory) => factory())
-    );
+    Component = ctx[remote][module] = lazy(async () => {
+      const container = window[remote];
+      await __webpack_init_sharing__(shareScope);
+      await container.init(__webpack_share_scopes__.default);
+      const factory = await container.get(module);
+      const Module = factory();
+      return Module;
+    });
   }
-  console.log(Component)
   return Component;
 }
 
@@ -32,12 +31,12 @@ function getServerComponent(ctx, remote, module, props) {
   const id = stringify({ remote, module, props });
 
   let Component = ctx[id];
-  
+
   if (!Component) {
     Component = ctx[id] = lazy(() =>
       // Do the post request to pre-render the federated component
       // fetch(`${process.env.REMOTE_HOSTS[remote]}/prerender`, {
-        fetch(`http://localhost:3001/prerender`, {
+      fetch(`http://localhost:3001/prerender`, {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -131,8 +130,12 @@ export default function federatedComponent(
   shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
-    console.log(context)
-    const ctx = createContext({}) //useContext(context);
+    console.log(context);
+    const ctx = createContext({
+      module: "./header",
+      props: {},
+      remote: "webpackRemote",
+    }); //useContext(context); // it "runs" if I replace this with createContext()
     let Component;
 
     if (typeof window !== "undefined") {

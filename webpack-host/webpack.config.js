@@ -53,7 +53,6 @@ const clientConfig = {
           "webpackRemote@http://localhost:3001/static/container.js",
       },
       shared: {
-        ...packageJsonDeps,
         react: {
           singleton: true,
           eager: true,
