@@ -19,7 +19,9 @@ function getClientComponent(ctx, remote, module, shareScope) {
       await container.init(__webpack_share_scopes__.default);
       const factory = await container.get(module);
       const Module = factory();
+      console.log({Module})
       return Module;
+
     });
   }
   return Component;

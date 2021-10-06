@@ -19,7 +19,11 @@ function getClientComponent(ctx, remote, module, shareScope) {
         // __webpack_init_sharing__(shareScope)
         //   .then(() => window[remote].init(__webpack_share_scopes__[shareScope]))
         .then(() => window[remote].get(module))
-        .then((factory) => factory())
+        .then((factory) => {
+          const Module = factory();
+          console.log(Module);
+          return Module;
+        })
     );
   }
 
@@ -128,7 +132,7 @@ export default function federatedComponent(
   shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
-    console.log("esbuild: ", {context})
+    console.log("esbuild: ", { context });
     const ctx = useContext(context);
     let Component;
 
