@@ -6,6 +6,8 @@ const webpack = require("webpack");
 const FederatedStatsPlugin = require("webpack-federated-stats-plugin");
 const nodeExternals = require("webpack-node-externals");
 const { StatsWriterPlugin } = require("webpack-stats-plugin");
+const packageJsonDeps = require("./package.json").dependencies;
+
 
 /**
  * @type {webpack.Configuration}
@@ -107,6 +109,13 @@ const serverConfig = {
       library: { type: "commonjs" },
       exposes: {
         "./header": "./src/components/header.jsx",
+      },
+      shared: {
+        react: {
+          singleton: true,
+          eager: true,
+          requiredVersion: packageJsonDeps.react,
+        },
       },
     }),
   ],

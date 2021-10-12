@@ -1,12 +1,12 @@
 const path = require("path");
 
-const { ESBuildMinifyPlugin } = require("esbuild-loader");
+// const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 // const FederatedStatsPlugin = require("webpack-federated-stats-plugin");
 const nodeExternals = require("webpack-node-externals");
 // const { StatsWriterPlugin } = require("webpack-stats-plugin");
-const packageJsonDeps = require("./package.json").dependencies
+const packageJsonDeps = require("./package.json").dependencies;
 
 /**
  * @type {webpack.Configuration}
@@ -23,12 +23,8 @@ const clientConfig = {
     rules: [
       {
         test: /\.jsx?$/,
-        use: {
-          loader: "esbuild-loader",
-          options: {
-            loader: "jsx",
-          },
-        },
+        use: "babel-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
@@ -66,9 +62,9 @@ const clientConfig = {
       },
     }),
   ],
-  optimization: {
-    minimizer: [new ESBuildMinifyPlugin({})],
-  },
+  // optimization: {
+  //   minimizer: [new ESBuildMinifyPlugin({})],
+  // },
 };
 
 /**
@@ -90,12 +86,8 @@ const serverConfig = {
     rules: [
       {
         test: /\.jsx?$/,
-        use: {
-          loader: "esbuild-loader",
-          options: {
-            loader: "jsx",
-          },
-        },
+        use: "babel-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
@@ -120,7 +112,6 @@ const serverConfig = {
           "webpackRemote@http://localhost:3001/static/container.js",
       },
       shared: {
-        ...packageJsonDeps,
         react: {
           singleton: true,
           eager: true,
