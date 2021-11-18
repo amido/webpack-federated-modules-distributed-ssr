@@ -1,5 +1,8 @@
 const React = require("react");
-const { pipeToNodeWritable, renderToStaticMarkup } = require("react-dom/server");
+const {
+  pipeToNodeWritable,
+  renderToStaticMarkup,
+} = require("react-dom/server");
 
 const { json } = require("body-parser");
 const cors = require("cors");
@@ -71,12 +74,15 @@ app.use("/", (req, res) => {
     res.send();
     return;
   }
-
-  const chunks = stats.assetsByChunkName.app.concat(
-    stats.assetsByChunkName.bootstrap,
+  const chunksAppAndBootstrap = stats.assetsByChunkName.app.concat(
+    stats.assetsByChunkName.bootstrap
+  );
+  const chunks = chunksAppAndBootstrap.concat(
     stats.chunks.reduce((r, chunk) => {
       if (chunk.runtime.includes("app")) {
-        r.push(...chunk.files);
+        r.push(
+          ...chunk.files.filter((f) => !chunksAppAndBootstrap.includes(f))
+        );
       }
 
       return r;
