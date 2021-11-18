@@ -5,7 +5,13 @@ import federatedComponent, { context } from "./federated-component";
 
 export { context };
 
-const Header = federatedComponent("webpackRemote", "./header");
+const Header = federatedComponent("webpackRemote", "./header", undefined, 3001);
+const Paragraph = federatedComponent(
+  "webpackRemote2",
+  "./paragraph",
+  undefined,
+  3003
+);
 // const port = typeof window !== undefined ? env.PORT : "";
 export default function App() {
   // console.log("I am the app rendered on ", port);
@@ -26,13 +32,21 @@ export default function App() {
             <Header>
               <h1>Nested</h1>
               <p>Nested component</p>
+              <Paragraph>Paragraph nested from a different remote</Paragraph>
             </Header>
           </Header>
 
           {/* {Object.entries(process.env.REMOTE_HOSTS).map(([name, entry]) => (
             <script key={name} src={`${entry}/build/remote-entry.js`} />
           ))} */}
-            <script key="webpackRemote_url" src={`http://localhost:3001/build/remote-entry.js`} />
+          <script
+            key="webpackRemote_url"
+            src={`http://localhost:3001/build/remote-entry.js`}
+          />
+          <script
+            key="webpackRemote_url"
+            src={`http://localhost:3003/build/remote-entry.js`}
+          />
           <script type="module" src={`build/app.js`} />
         </React.Suspense>
       </body>

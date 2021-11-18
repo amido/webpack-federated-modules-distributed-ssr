@@ -9,12 +9,12 @@ const cors = require("cors");
 const express = require("express");
 
 const App = require("./dist/app").default;
-const remoteEntry = require("./dist/remote-entry");
+const remoteEntry = require("./dist/remote-entry-2");
 const stats = require("./public/build/stats.json");
 const federationStats = require("./public/build/federation-stats.json");
 
 const exposes = federationStats.federatedModules.find(
-  (m) => m.remote === "webpackRemote"
+  (m) => m.remote === "webpackRemote2"
 ).exposes;
 
 function getChunksForExposed(exposed) {
@@ -112,6 +112,6 @@ app.use("/", (req, res) => {
   setTimeout(abort, 5000);
 });
 
-app.listen(3001, () =>
-  console.log("webpack remote: started at http://localhost:3001")
+app.listen(3003, () =>
+  console.log("webpack remote: started at http://localhost:3003")
 );

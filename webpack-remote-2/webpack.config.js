@@ -49,27 +49,12 @@ const clientConfig = {
       filename: "federation-stats.json",
     }),
     new webpack.container.ModuleFederationPlugin({
-      name: "webpackRemote",
-      filename: "remote-entry.js",
+      name: "webpackRemote2",
+      filename: "remote-entry-2.js",
       exposes: {
-        "./header": "./src/components/header.jsx",
+        "./paragraph": "./src/components/paragraph.jsx",
       },
-      shared: {
-        react: {
-          singleton: true,
-          eager: true,
-          requiredVersion: packageJsonDeps.react,
-        },
-        "react-dom": {
-          singleton: true,
-          eager: true,
-          requiredVersion: packageJsonDeps["react-dom"],
-        },
-      },
-      remotes: {
-        webpackRemote2:
-          "webpackRemote2@http://localhost:3003/static/container.js",
-      },
+      shared: ["react", "react-dom"],
     }),
   ],
   optimization: {
@@ -118,11 +103,11 @@ const serverConfig = {
   },
   plugins: [
     new webpack.container.ModuleFederationPlugin({
-      name: "webpackRemote",
-      filename: "remote-entry.js",
+      name: "webpackRemote2",
+      filename: "remote-entry-2.js",
       library: { type: "commonjs" },
       exposes: {
-        "./header": "./src/components/header.jsx",
+        "./paragraph": "./src/components/paragraph.jsx",
       },
       shared: {
         react: {
@@ -130,10 +115,6 @@ const serverConfig = {
           eager: true,
           requiredVersion: packageJsonDeps.react,
         },
-      },
-      remotes: {
-        webpackRemote2:
-          "webpackRemote2@http://localhost:3003/static/container.js",
       },
     }),
   ],

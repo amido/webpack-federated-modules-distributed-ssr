@@ -47,6 +47,8 @@ const clientConfig = {
       remotes: {
         webpackRemote:
           "webpackRemote@http://localhost:3001/static/container.js",
+        webpackRemote2:
+          "webpackRemote2@http://localhost:3003/static/container.js",
       },
       shared: {
         react: {
@@ -110,6 +112,8 @@ const serverConfig = {
       remotes: {
         webpackRemote:
           "webpackRemote@http://localhost:3001/static/container.js",
+        webpackRemote2:
+          "webpackRemote2@http://localhost:3003/static/container.js",
       },
       shared: {
         react: {

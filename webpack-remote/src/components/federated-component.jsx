@@ -26,7 +26,7 @@ function getClientComponent(ctx, remote, module, shareScope) {
   return Component;
 }
 
-function getServerComponent(ctx, remote, module, props, port) {
+function getServerComponent(ctx, remote, module, props) {
   // We cache based on properties. This allows us to only
   // do one fetch for multiple references of a remote component.
   const id = stringify({ remote, module, props });
@@ -37,7 +37,7 @@ function getServerComponent(ctx, remote, module, props, port) {
     Component = ctx[id] = lazy(() =>
       // Do the post request to pre-render the federated component
       // fetch(`${process.env.REMOTE_HOSTS[remote]}/prerender`, {
-      fetch(`http://localhost:${port}/prerender`, {
+      fetch(`http://localhost:3003/prerender`, {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -101,13 +101,13 @@ function getServerComponent(ctx, remote, module, props, port) {
                         key={chunk}
                         rel="stylesheet"
                         // href={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
-                        href={`http://localhost:${port}/build/${chunk}`}
+                        href={`http://localhost:3003/build/${chunk}`}
                       />
                     ) : (
                       <script
                         key={chunk}
                         async
-                        src={`http://localhost:${port}/build/${chunk}`}
+                        src={`http://localhost:3003/build/${chunk}`}
                         // src={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
                       />
                     )
@@ -128,8 +128,7 @@ function getServerComponent(ctx, remote, module, props, port) {
 export default function federatedComponent(
   remote,
   module,
-  shareScope = "default",
-  port
+  shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
     console.log("webpack", { context });
@@ -141,7 +140,7 @@ export default function federatedComponent(
     }
 
     if (typeof window === "undefined") {
-      Component = getServerComponent(context, remote, module, props, port);
+      Component = getServerComponent(context, remote, module, props);
     }
 
     return <Component {...props}>{children}</Component>;

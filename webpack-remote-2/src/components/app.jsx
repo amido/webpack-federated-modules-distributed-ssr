@@ -1,12 +1,6 @@
 import React from "react";
 
-import federatedComponent, { context } from "./federated-component";
-
-export { context };
-
-const Paragraph = federatedComponent("webpackRemote2", "./paragraph");
-
-import Header from "./header";
+import Paragraph from "./paragraph";
 
 export default function App({ chunks }) {
   return (
@@ -23,17 +17,7 @@ export default function App({ chunks }) {
         )}
       </head>
       <body>
-        <React.Suspense fallback="">
-          <Header>
-            <h1>Header</h1>
-            <Paragraph>Paragraph from different remote</Paragraph>
-          </Header>
-        </React.Suspense>
-
-        <script
-          key="webpackRemote2_url"
-          src={`http://localhost:3003/build/remote-entry-2.js`}
-        />
+        <Paragraph>Paragraph</Paragraph>
 
         <script
           dangerouslySetInnerHTML={{
