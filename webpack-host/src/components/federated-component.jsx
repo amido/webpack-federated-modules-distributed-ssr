@@ -132,20 +132,16 @@ export default function federatedComponent(
   shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
-    console.log(context);
-    const ctx = createContext({
-      module: "./header",
-      props: {},
-      remote: "webpackRemote",
-    }); //useContext(context); // it "runs" if I replace this with createContext()
+    console.log("webpack", {context});
+    // const ctx = useContext(context); 
     let Component;
 
     if (typeof window !== "undefined") {
-      Component = getClientComponent(ctx, remote, module, shareScope);
+      Component = getClientComponent(context, remote, module, shareScope);
     }
 
     if (typeof window === "undefined") {
-      Component = getServerComponent(ctx, remote, module, props);
+      Component = getServerComponent(context, remote, module, props);
     }
 
     return <Component {...props}>{children}</Component>;
