@@ -31,11 +31,6 @@ export default function App({ chunks }) {
         </React.Suspense>
 
         <script
-          key="webpackRemote2_url"
-          src={`http://localhost:3003/build/remote-entry-2.js`}
-        />
-
-        <script
           dangerouslySetInnerHTML={{
             __html: `window.__CHUNKS__ = ${JSON.stringify(chunks)};`,
           }}
@@ -44,6 +39,11 @@ export default function App({ chunks }) {
         {chunks.map((c) =>
           c.endsWith(".js") ? <script key={c} src={`build/${c}`} /> : null
         )}
+
+        <script
+          key="webpackRemote2_url"
+          src={`http://localhost:3003/build/remote-entry.js`}
+        />
       </body>
     </html>
   );

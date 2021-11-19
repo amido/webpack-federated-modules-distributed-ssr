@@ -9,7 +9,7 @@ const cors = require("cors");
 const express = require("express");
 
 const App = require("./dist/app").default;
-const remoteEntry = require("./dist/remote-entry-2");
+const remoteEntry = require("./dist/remote-entry");
 const stats = require("./public/build/stats.json");
 const federationStats = require("./public/build/federation-stats.json");
 

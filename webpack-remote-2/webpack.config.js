@@ -50,7 +50,7 @@ const clientConfig = {
     }),
     new webpack.container.ModuleFederationPlugin({
       name: "webpackRemote2",
-      filename: "remote-entry-2.js",
+      filename: "remote-entry.js",
       exposes: {
         "./paragraph": "./src/components/paragraph.jsx",
       },
@@ -104,7 +104,7 @@ const serverConfig = {
   plugins: [
     new webpack.container.ModuleFederationPlugin({
       name: "webpackRemote2",
-      filename: "remote-entry-2.js",
+      filename: "remote-entry.js",
       library: { type: "commonjs" },
       exposes: {
         "./paragraph": "./src/components/paragraph.jsx",

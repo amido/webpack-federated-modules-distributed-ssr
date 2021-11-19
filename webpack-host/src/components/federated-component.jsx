@@ -19,14 +19,15 @@ function getClientComponent(ctx, remote, module, shareScope) {
       await container.init(__webpack_share_scopes__.default);
       const factory = await container.get(module);
       const Module = factory();
-      console.log({ Module });
       return Module;
     });
   }
   return Component;
 }
 
-function getServerComponent(ctx, remote, module, props, port) {
+const REMOTE_HOSTS = process.env.REMOTE_HOSTS;
+
+function getServerComponent(ctx, remote, module, props) {
   // We cache based on properties. This allows us to only
   // do one fetch for multiple references of a remote component.
   const id = stringify({ remote, module, props });
@@ -37,7 +38,7 @@ function getServerComponent(ctx, remote, module, props, port) {
     Component = ctx[id] = lazy(() =>
       // Do the post request to pre-render the federated component
       // fetch(`${process.env.REMOTE_HOSTS[remote]}/prerender`, {
-      fetch(`http://localhost:${port}/prerender`, {
+      fetch(`${REMOTE_HOSTS[remote]}/prerender`, {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -101,13 +102,13 @@ function getServerComponent(ctx, remote, module, props, port) {
                         key={chunk}
                         rel="stylesheet"
                         // href={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
-                        href={`http://localhost:${port}/build/${chunk}`}
+                        href={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
                       />
                     ) : (
                       <script
                         key={chunk}
                         async
-                        src={`http://localhost:${port}/build/${chunk}`}
+                        src={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
                         // src={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
                       />
                     )
@@ -128,12 +129,9 @@ function getServerComponent(ctx, remote, module, props, port) {
 export default function federatedComponent(
   remote,
   module,
-  shareScope = "default",
-  port
+  shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
-    console.log("webpack", { context });
-    // const ctx = useContext(context);
     let Component;
 
     if (typeof window !== "undefined") {
@@ -141,7 +139,7 @@ export default function federatedComponent(
     }
 
     if (typeof window === "undefined") {
-      Component = getServerComponent(context, remote, module, props, port);
+      Component = getServerComponent(context, remote, module, props);
     }
 
     return <Component {...props}>{children}</Component>;
