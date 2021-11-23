@@ -9,7 +9,7 @@ const dotenv = require("dotenv").config();
 
 const app = express();
 
-const APP_PORT = dotenv.APP_PORT || "3002";
+const PORT = dotenv.PORT || "3002";
 
 app.use("/", express.static("./public"));
 
@@ -47,6 +47,6 @@ app.use("/", (req, res) => {
   setTimeout(abort, 5000);
 });
 
-app.listen(APP_PORT, () =>
-  console.log(`webpack host: started at http://localhost:${APP_PORT}`)
+app.listen(PORT, () =>
+  console.log(`webpack host: started at http://localhost:${PORT}`)
 );

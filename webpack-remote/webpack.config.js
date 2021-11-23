@@ -8,6 +8,20 @@ const nodeExternals = require("webpack-node-externals");
 const { StatsWriterPlugin } = require("webpack-stats-plugin");
 const packageJsonDeps = require("./package.json").dependencies;
 
+const dotenv = require("dotenv").config();
+
+const WEBPACK_REMOTE_2_URL =
+  dotenv.WEBPACK_REMOTE_2_URL || "http://localhost:3003";
+const REMOTE_HOSTS = {
+  webpackRemote2: WEBPACK_REMOTE_2_URL,
+};
+
+const REMOTES = Object.entries(REMOTE_HOSTS)
+  .map(([name, entry]) => ({
+    [name]: `${entry}/static/container.js`,
+  }))
+  .reduce((acc, n) => ({ ...acc, ...n }), {});
+
 /**
  * @type {webpack.Configuration}
  */
@@ -40,6 +54,9 @@ const clientConfig = {
     ],
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      REMOTE_HOSTS,
+    }),
     new MiniCssExtractPlugin(),
     new StatsWriterPlugin({
       filename: "stats.json",
@@ -55,10 +72,7 @@ const clientConfig = {
         "./header": "./src/components/header.jsx",
       },
       shared: ["react", "react-dom"],
-      remotes: {
-        webpackRemote2:
-          "webpackRemote2@http://localhost:3003/static/container.js",
-      },
+      remotes: REMOTES,
     }),
   ],
   optimization: {
@@ -106,6 +120,9 @@ const serverConfig = {
     ],
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      REMOTE_HOSTS,
+    }),
     new webpack.container.ModuleFederationPlugin({
       name: "webpackRemote",
       filename: "remote-entry.js",
@@ -120,10 +137,7 @@ const serverConfig = {
           requiredVersion: packageJsonDeps.react,
         },
       },
-      remotes: {
-        webpackRemote2:
-          "webpackRemote2@http://localhost:3003/static/container.js",
-      },
+      remotes: REMOTES,
     }),
   ],
   optimization: {

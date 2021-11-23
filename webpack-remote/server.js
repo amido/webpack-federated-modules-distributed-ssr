@@ -13,6 +13,10 @@ const remoteEntry = require("./dist/remote-entry");
 const stats = require("./public/build/stats.json");
 const federationStats = require("./public/build/federation-stats.json");
 
+const dotenv = require("dotenv").config();
+
+const PORT = dotenv.PORT || "3001";
+
 const exposes = federationStats.federatedModules.find(
   (m) => m.remote === "webpackRemote"
 ).exposes;
@@ -113,6 +117,6 @@ app.use("/", (req, res) => {
   setTimeout(abort, 5000);
 });
 
-app.listen(3001, () =>
-  console.log("webpack remote: started at http://localhost:3001")
+app.listen(PORT, () =>
+  console.log(`webpack remote: started at http://localhost:${PORT}`)
 );

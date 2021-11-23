@@ -1,9 +1,10 @@
 const React = require("react");
 const { pipeToNodeWritable } = require("react-dom/server");
-
 const express = require("express");
-
 const App = require("./dist/app");
+const dotenv = require("dotenv").config();
+
+const PORT = dotenv.PORT || "3000";
 
 const app = express();
 
@@ -43,6 +44,6 @@ app.use("/", (req, res) => {
   setTimeout(abort, 5000);
 });
 
-app.listen(3000, () =>
-  console.log("esbuild host: started at http://localhost:3000")
+app.listen(PORT, () =>
+  console.log(`esbuild host: started at http://localhost:${PORT}`)
 );

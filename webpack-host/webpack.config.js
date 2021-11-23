@@ -1,11 +1,8 @@
 const path = require("path");
 
-// const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
-// const FederatedStatsPlugin = require("webpack-federated-stats-plugin");
 const nodeExternals = require("webpack-node-externals");
-// const { StatsWriterPlugin } = require("webpack-stats-plugin");
 const packageJsonDeps = require("./package.json").dependencies;
 const dotenv = require("dotenv").config();
 
@@ -50,13 +47,6 @@ const clientConfig = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-    // new StatsWriterPlugin({
-    //   filename: "stats.json",
-    //   stats: { all: true },
-    // }),
-    // new FederatedStatsPlugin({
-    //   filename: "federation-stats.json",
-    // }),
     new webpack.EnvironmentPlugin({
       REMOTE_HOSTS,
     }),
