@@ -1,4 +1,4 @@
-import React, { createContext, lazy, useContext } from "react";
+import React, { createContext, lazy } from "react";
 import { Parser, ProcessNodeDefinitions } from "html-to-react";
 import stringify from "json-stringify-deterministic";
 import fetch from "node-fetch";
@@ -37,13 +37,12 @@ function getServerComponent(ctx, remote, module, props) {
   if (!Component) {
     Component = ctx[id] = lazy(() =>
       // Do the post request to pre-render the federated component
-      // fetch(`${process.env.REMOTE_HOSTS[remote]}/prerender`, {
       fetch(`${REMOTE_HOSTS[remote]}/prerender`, {
         method: "post",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({
+        body: stringify({
           module,
           props,
         }),
@@ -101,7 +100,6 @@ function getServerComponent(ctx, remote, module, props) {
                       <link
                         key={chunk}
                         rel="stylesheet"
-                        // href={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
                         href={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
                       />
                     ) : (
@@ -109,7 +107,6 @@ function getServerComponent(ctx, remote, module, props) {
                         key={chunk}
                         async
                         src={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
-                        // src={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
                       />
                     )
                   )}

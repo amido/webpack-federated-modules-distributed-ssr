@@ -5,8 +5,6 @@ import federatedComponent, { context } from "./federated-component";
 
 export { context };
 
-console.log("remote", process.env.REMOTE_HOSTS);
-
 const Header = federatedComponent("webpackRemote", "./header");
 // const port = typeof window !== undefined ? env.PORT : "";
 export default function App() {

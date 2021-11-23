@@ -54,18 +54,7 @@ const clientConfig = {
       exposes: {
         "./header": "./src/components/header.jsx",
       },
-      shared: {
-        react: {
-          singleton: true,
-          eager: true,
-          requiredVersion: packageJsonDeps.react,
-        },
-        "react-dom": {
-          singleton: true,
-          eager: true,
-          requiredVersion: packageJsonDeps["react-dom"],
-        },
-      },
+      shared: ["react", "react-dom"],
       remotes: {
         webpackRemote2:
           "webpackRemote2@http://localhost:3003/static/container.js",

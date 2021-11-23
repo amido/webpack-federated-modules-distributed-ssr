@@ -12,6 +12,7 @@ const Paragraph = federatedComponent(
   "./paragraph",
   undefined
 );
+
 // const port = typeof window !== undefined ? env.PORT : "";
 export default function App() {
   return (
@@ -33,15 +34,11 @@ export default function App() {
               <Paragraph>Paragraph nested from a different remote</Paragraph>
             </Header>
           </Header>
-
-          {Object.entries(REMOTE_HOSTS).map(([name, entry]) => (
-            <script
-              key={`${name}_url`}
-              src={`${entry}/build/remote-entry.js`}
-            />
-          ))}
-          <script type="module" src={`build/app.js`} />
         </React.Suspense>
+        {Object.entries(REMOTE_HOSTS).map(([name, entry]) => (
+          <script key={`${name}_url`} src={`${entry}/build/remote-entry.js`} />
+        ))}
+        <script type="module" src={`build/app.js`} />
       </body>
     </html>
   );

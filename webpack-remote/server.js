@@ -64,6 +64,7 @@ app.use("/prerender", json(), async (req, res, next) => {
       html,
     });
   } catch (err) {
+    console.log("err", err);
     next(err);
   }
 });

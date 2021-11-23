@@ -1,4 +1,4 @@
-import React, { createContext, lazy, useContext } from "react";
+import React, { createContext, lazy } from "react";
 import { Parser, ProcessNodeDefinitions } from "html-to-react";
 import stringify from "json-stringify-deterministic";
 import fetch from "node-fetch";
@@ -19,7 +19,6 @@ function getClientComponent(ctx, remote, module, shareScope) {
       await container.init(__webpack_share_scopes__.default);
       const factory = await container.get(module);
       const Module = factory();
-      console.log({ Module });
       return Module;
     });
   }
@@ -131,7 +130,6 @@ export default function federatedComponent(
   shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
-    console.log("webpack", { context });
     // const ctx = useContext(context);
     let Component;
 

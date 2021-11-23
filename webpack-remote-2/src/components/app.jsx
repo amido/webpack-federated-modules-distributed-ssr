@@ -8,7 +8,7 @@ export default function App({ chunks }) {
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Webpack Remote</title>
+        <title>Webpack Remote 2</title>
 
         {chunks.map((c) =>
           c.endsWith(".css") ? (
