@@ -21,7 +21,6 @@ function getClientComponent(ctx, remote, module, shareScope) {
         .then(() => window[remote].get(module))
         .then((factory) => {
           const Module = factory();
-          console.log(Module);
           return Module;
         })
     );
@@ -132,7 +131,6 @@ export default function federatedComponent(
   shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
-    console.log("esbuild: ", { context });
     const ctx = useContext(context);
     let Component;
 

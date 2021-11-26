@@ -8,20 +8,6 @@ const nodeExternals = require("webpack-node-externals");
 const { StatsWriterPlugin } = require("webpack-stats-plugin");
 const packageJsonDeps = require("./package.json").dependencies;
 
-const dotenv = require("dotenv").config();
-
-const WEBPACK_REMOTE_2_URL =
-  dotenv.WEBPACK_REMOTE_2_URL || "http://localhost:3003";
-const REMOTE_HOSTS = {
-  webpackRemote2: WEBPACK_REMOTE_2_URL,
-};
-
-const REMOTES = Object.entries(REMOTE_HOSTS)
-  .map(([name, entry]) => ({
-    [name]: `${entry}/static/container.js`,
-  }))
-  .reduce((acc, n) => ({ ...acc, ...n }), {});
-
 /**
  * @type {webpack.Configuration}
  */
@@ -54,9 +40,6 @@ const clientConfig = {
     ],
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      REMOTE_HOSTS,
-    }),
     new MiniCssExtractPlugin(),
     new StatsWriterPlugin({
       filename: "stats.json",
@@ -66,13 +49,12 @@ const clientConfig = {
       filename: "federation-stats.json",
     }),
     new webpack.container.ModuleFederationPlugin({
-      name: "webpackRemote",
+      name: "webpackRemote2",
       filename: "remote-entry.js",
       exposes: {
-        "./header": "./src/components/header.jsx",
+        "./paragraph": "./src/components/paragraph.jsx",
       },
       shared: ["react", "react-dom"],
-      remotes: REMOTES,
     }),
   ],
   optimization: {
@@ -120,15 +102,12 @@ const serverConfig = {
     ],
   },
   plugins: [
-    new webpack.EnvironmentPlugin({
-      REMOTE_HOSTS,
-    }),
     new webpack.container.ModuleFederationPlugin({
-      name: "webpackRemote",
+      name: "webpackRemote2",
       filename: "remote-entry.js",
       library: { type: "commonjs" },
       exposes: {
-        "./header": "./src/components/header.jsx",
+        "./paragraph": "./src/components/paragraph.jsx",
       },
       shared: {
         react: {
@@ -137,7 +116,6 @@ const serverConfig = {
           requiredVersion: packageJsonDeps.react,
         },
       },
-      remotes: REMOTES,
     }),
   ],
   optimization: {

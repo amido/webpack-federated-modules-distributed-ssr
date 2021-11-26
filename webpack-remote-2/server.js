@@ -14,11 +14,10 @@ const stats = require("./public/build/stats.json");
 const federationStats = require("./public/build/federation-stats.json");
 
 const dotenv = require("dotenv").config();
-
-const PORT = dotenv.PORT || "3001";
+const PORT = dotenv.PORT || "3003";
 
 const exposes = federationStats.federatedModules.find(
-  (m) => m.remote === "webpackRemote"
+  (m) => m.remote === "webpackRemote2"
 ).exposes;
 
 function getChunksForExposed(exposed) {
@@ -68,7 +67,6 @@ app.use("/prerender", json(), async (req, res, next) => {
       html,
     });
   } catch (err) {
-    console.log("err", err);
     next(err);
   }
 });

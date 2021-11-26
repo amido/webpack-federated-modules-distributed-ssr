@@ -1,12 +1,25 @@
 const path = require("path");
 
-// const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
-// const FederatedStatsPlugin = require("webpack-federated-stats-plugin");
 const nodeExternals = require("webpack-node-externals");
-// const { StatsWriterPlugin } = require("webpack-stats-plugin");
 const packageJsonDeps = require("./package.json").dependencies;
+const dotenv = require("dotenv").config();
+
+const WEBPACK_REMOTE_URL = dotenv.WEBPACK_REMOTE_URL || "http://localhost:3001";
+const WEBPACK_REMOTE_2_URL =
+  dotenv.WEBPACK_REMOTE_2_URL || "http://localhost:3003";
+
+const REMOTE_HOSTS = {
+  webpackRemote: WEBPACK_REMOTE_URL,
+  webpackRemote2: WEBPACK_REMOTE_2_URL,
+};
+
+const REMOTES = Object.entries(REMOTE_HOSTS)
+  .map(([name, entry]) => ({
+    [name]: `${entry}/static/container.js`,
+  }))
+  .reduce((acc, n) => ({ ...acc, ...n }), {});
 
 /**
  * @type {webpack.Configuration}
@@ -34,20 +47,13 @@ const clientConfig = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-    // new StatsWriterPlugin({
-    //   filename: "stats.json",
-    //   stats: { all: true },
-    // }),
-    // new FederatedStatsPlugin({
-    //   filename: "federation-stats.json",
-    // }),
+    new webpack.EnvironmentPlugin({
+      REMOTE_HOSTS,
+    }),
     new webpack.container.ModuleFederationPlugin({
       name: "webpackHost",
       filename: "remote-entry.js",
-      remotes: {
-        webpackRemote:
-          "webpackRemote@http://localhost:3001/static/container.js",
-      },
+      remotes: REMOTES,
       shared: {
         react: {
           singleton: true,
@@ -103,14 +109,14 @@ const serverConfig = {
     ],
   },
   plugins: [
+    new webpack.EnvironmentPlugin({
+      REMOTE_HOSTS,
+    }),
     new webpack.container.ModuleFederationPlugin({
       name: "webpackHost",
       filename: "remote-entry.js",
       library: { type: "commonjs" },
-      remotes: {
-        webpackRemote:
-          "webpackRemote@http://localhost:3001/static/container.js",
-      },
+      remotes: REMOTES,
       shared: {
         react: {
           singleton: true,

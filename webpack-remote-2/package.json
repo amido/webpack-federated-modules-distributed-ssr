@@ -1,5 +1,5 @@
 {
-  "name": "webpack-host",
+  "name": "webpack-remote-2",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -9,7 +9,6 @@
     "start": "node ./server.js"
   },
   "dependencies": {
-    "babel-loader": "^8.2.2",
     "body-parser": "1.19.0",
     "cors": "2.8.5",
     "express": "4.17.1",
@@ -17,14 +16,12 @@
     "react-dom": "18.0.0-alpha-386e8f2ea-20210624"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.8",
-    "@babel/preset-react": "^7.14.5",
     "css-loader": "5.2.6",
-    "dotenv": "^9.0.0",
     "esbuild": "0.12.9",
     "esbuild-loader": "2.13.1",
     "mini-css-extract-plugin": "1.6.0",
     "serve": "12.0.0",
+    "dotenv": "^9.0.0",
     "webpack": "5.40.0",
     "webpack-cli": "4.7.2",
     "webpack-federated-stats-plugin": "2.0.5",

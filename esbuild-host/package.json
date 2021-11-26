@@ -19,6 +19,7 @@
     "esbuild": "0.12.9",
     "esbuild-federation-share-scope": "0.0.2",
     "esbuild-node-externals": "1.3.0",
-    "serve": "12.0.0"
+    "serve": "12.0.0",
+    "dotenv": "^9.0.0"
   }
 }

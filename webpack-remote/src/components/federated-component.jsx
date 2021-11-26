@@ -25,8 +25,6 @@ function getClientComponent(ctx, remote, module, shareScope) {
   return Component;
 }
 
-const REMOTE_HOSTS = process.env.REMOTE_HOSTS;
-
 function getServerComponent(ctx, remote, module, props) {
   // We cache based on properties. This allows us to only
   // do one fetch for multiple references of a remote component.
@@ -37,12 +35,13 @@ function getServerComponent(ctx, remote, module, props) {
   if (!Component) {
     Component = ctx[id] = lazy(() =>
       // Do the post request to pre-render the federated component
-      fetch(`${REMOTE_HOSTS[remote]}/prerender`, {
+      // fetch(`${process.env.REMOTE_HOSTS[remote]}/prerender`, {
+      fetch(`http://localhost:3003/prerender`, {
         method: "post",
         headers: {
           "content-type": "application/json",
         },
-        body: stringify({
+        body: JSON.stringify({
           module,
           props,
         }),
@@ -100,13 +99,15 @@ function getServerComponent(ctx, remote, module, props) {
                       <link
                         key={chunk}
                         rel="stylesheet"
-                        href={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
+                        // href={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
+                        href={`http://localhost:3003/build/${chunk}`}
                       />
                     ) : (
                       <script
                         key={chunk}
                         async
-                        src={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
+                        src={`http://localhost:3003/build/${chunk}`}
+                        // src={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
                       />
                     )
                   )}
@@ -129,6 +130,7 @@ export default function federatedComponent(
   shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
+    // const ctx = useContext(context);
     let Component;
 
     if (typeof window !== "undefined") {
