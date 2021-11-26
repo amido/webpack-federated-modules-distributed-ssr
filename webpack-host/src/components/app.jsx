@@ -1,10 +1,10 @@
 import React from "react";
 
+import { REMOTE_URLS } from "../config";
+
 import federatedComponent, { context } from "./federated-component";
 
 export { context };
-
-const REMOTE_HOSTS = process.env.REMOTE_HOSTS;
 
 const Header = federatedComponent("webpackRemote", "./header", undefined);
 const Paragraph = federatedComponent(
@@ -35,7 +35,7 @@ export default function App() {
             </Header>
           </Header>
         </React.Suspense>
-        {Object.entries(REMOTE_HOSTS).map(([name, entry]) => (
+        {Object.entries(REMOTE_URLS).map(([name, entry]) => (
           <script key={`${name}_url`} src={`${entry}/build/remote-entry.js`} />
         ))}
         <script type="module" src={`build/app.js`} />

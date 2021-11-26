@@ -3,7 +3,7 @@ import { Parser, ProcessNodeDefinitions } from "html-to-react";
 import stringify from "json-stringify-deterministic";
 import fetch from "node-fetch";
 
-// import { initSharing, shareScopes } from "@runtime/federation";
+import { REMOTE_URLS } from "../config";
 
 export const context = createContext({});
 
@@ -25,8 +25,6 @@ function getClientComponent(ctx, remote, module, shareScope) {
   return Component;
 }
 
-const REMOTE_HOSTS = process.env.REMOTE_HOSTS;
-
 function getServerComponent(ctx, remote, module, props) {
   // We cache based on properties. This allows us to only
   // do one fetch for multiple references of a remote component.
@@ -37,7 +35,7 @@ function getServerComponent(ctx, remote, module, props) {
   if (!Component) {
     Component = ctx[id] = lazy(() =>
       // Do the post request to pre-render the federated component
-      fetch(`${REMOTE_HOSTS[remote]}/prerender`, {
+      fetch(`${REMOTE_URLS[remote]}/prerender`, {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -100,13 +98,13 @@ function getServerComponent(ctx, remote, module, props) {
                       <link
                         key={chunk}
                         rel="stylesheet"
-                        href={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
+                        href={`${REMOTE_URLS[remote]}/build/${chunk}`}
                       />
                     ) : (
                       <script
                         key={chunk}
                         async
-                        src={`${REMOTE_HOSTS[remote]}/build/${chunk}`}
+                        src={`${REMOTE_URLS[remote]}/build/${chunk}`}
                       />
                     )
                   )}

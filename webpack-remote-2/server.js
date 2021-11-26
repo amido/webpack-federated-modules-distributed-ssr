@@ -1,6 +1,6 @@
 const React = require("react");
 const {
-  pipeToNodeWritable,
+  renderToPipeableStream,
   renderToStaticMarkup,
 } = require("react-dom/server");
 
@@ -94,16 +94,15 @@ app.use("/", (req, res) => {
   );
 
   let didError = false;
-  const { startWriting, abort } = pipeToNodeWritable(
+  const { pipe, abort } = renderToPipeableStream(
     React.createElement(App, { chunks }),
-    res,
     {
-      onReadyToStream() {
+      onCompleteShell() {
         // If something errored before we started streaming, we set the error code appropriately.
         res.statusCode = didError ? 500 : 200;
         res.contentType("html");
         res.write("<!DOCTYPE html>");
-        startWriting();
+        pipe(res);
       },
       onError(x) {
         didError = true;

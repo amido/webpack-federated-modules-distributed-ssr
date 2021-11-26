@@ -3,7 +3,7 @@ import { Parser, ProcessNodeDefinitions } from "html-to-react";
 import stringify from "json-stringify-deterministic";
 import fetch from "node-fetch";
 
-// import { initSharing, shareScopes } from "@runtime/federation";
+import { REMOTE_URLS } from "../config";
 
 export const context = createContext({});
 
@@ -35,13 +35,12 @@ function getServerComponent(ctx, remote, module, props) {
   if (!Component) {
     Component = ctx[id] = lazy(() =>
       // Do the post request to pre-render the federated component
-      // fetch(`${process.env.REMOTE_HOSTS[remote]}/prerender`, {
-      fetch(`http://localhost:3003/prerender`, {
+      fetch(`${REMOTE_URLS[remote]}/prerender`, {
         method: "post",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({
+        body: stringify({
           module,
           props,
         }),
@@ -99,15 +98,13 @@ function getServerComponent(ctx, remote, module, props) {
                       <link
                         key={chunk}
                         rel="stylesheet"
-                        // href={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
-                        href={`http://localhost:3003/build/${chunk}`}
+                        href={`${REMOTE_URLS[remote]}/build/${chunk}`}
                       />
                     ) : (
                       <script
                         key={chunk}
                         async
-                        src={`http://localhost:3003/build/${chunk}`}
-                        // src={`${process.env.REMOTE_HOSTS[remote]}/build/${chunk}`}
+                        src={`${REMOTE_URLS[remote]}/build/${chunk}`}
                       />
                     )
                   )}
@@ -130,7 +127,6 @@ export default function federatedComponent(
   shareScope = "default"
 ) {
   const FederatedComponent = ({ children, ...props }) => {
-    // const ctx = useContext(context);
     let Component;
 
     if (typeof window !== "undefined") {

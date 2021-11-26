@@ -1,5 +1,5 @@
 const React = require("react");
-const { pipeToNodeWritable } = require("react-dom/server");
+const { renderToPipeableStream } = require("react-dom/server");
 const express = require("express");
 const App = require("./dist/app");
 const dotenv = require("dotenv").config();
@@ -19,20 +19,19 @@ app.use("/", (req, res) => {
 
   let didError = false;
   const ctx = {};
-  const { startWriting, abort } = pipeToNodeWritable(
+  const { pipe, abort } = renderToPipeableStream(
     React.createElement(
       App.context.Provider,
       { value: ctx },
       React.createElement(App.default)
     ),
-    res,
     {
       onCompleteAll() {
         // If something errored before we started streaming, we set the error code appropriately.
         res.statusCode = didError ? 500 : 200;
         res.contentType("html");
         res.write("<!DOCTYPE html>");
-        startWriting();
+        pipe(res);
       },
       onError(x) {
         didError = true;

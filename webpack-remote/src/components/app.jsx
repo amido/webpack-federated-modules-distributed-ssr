@@ -1,5 +1,6 @@
 import React from "react";
 
+import { REMOTE_URLS } from "../config";
 import federatedComponent, { context } from "./federated-component";
 
 export { context };
@@ -40,10 +41,9 @@ export default function App({ chunks }) {
           c.endsWith(".js") ? <script key={c} src={`build/${c}`} /> : null
         )}
 
-        <script
-          key="webpackRemote2_url"
-          src={`http://localhost:3003/build/remote-entry.js`}
-        />
+        {Object.entries(REMOTE_URLS).map(([name, entry]) => (
+          <script key={`${name}_url`} src={`${entry}/build/remote-entry.js`} />
+        ))}
       </body>
     </html>
   );
