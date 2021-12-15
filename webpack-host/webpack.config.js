@@ -4,18 +4,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 const packageJsonDeps = require("./package.json").dependencies;
-const dotenv = require("dotenv").config();
+const { parsed: env } = require("dotenv").config();
 
-const WEBPACK_REMOTE_URL = dotenv.WEBPACK_REMOTE_URL || "http://localhost:3001";
-const WEBPACK_REMOTE_2_URL =
-  dotenv.WEBPACK_REMOTE_2_URL || "http://localhost:3003";
+const REMOTE_URLS = JSON.parse(env.REMOTE_URLS);
 
-const REMOTE_HOSTS = {
-  webpackRemote: WEBPACK_REMOTE_URL,
-  webpackRemote2: WEBPACK_REMOTE_2_URL,
-};
-
-const REMOTES = Object.entries(REMOTE_HOSTS)
+const REMOTES = Object.entries(REMOTE_URLS)
   .map(([name, entry]) => ({
     [name]: `${entry}/static/container.js`,
   }))
@@ -48,7 +41,7 @@ const clientConfig = {
   plugins: [
     new MiniCssExtractPlugin(),
     new webpack.EnvironmentPlugin({
-      REMOTE_HOSTS,
+      REMOTE_URLS,
     }),
     new webpack.container.ModuleFederationPlugin({
       name: "webpackHost",
@@ -110,7 +103,7 @@ const serverConfig = {
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      REMOTE_HOSTS,
+      REMOTE_URLS,
     }),
     new webpack.container.ModuleFederationPlugin({
       name: "webpackHost",
