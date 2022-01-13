@@ -13,7 +13,7 @@ From the root of the project:
 ```bash
 yarn
 yarn build
-yarn start
+yarn start 
 ```
 
 The webpack bundled application that owns the Header component will start on http://localhost:3001 while the esbuild bundled application that consumes the exposed Header component will start on http://localhost:3000.
