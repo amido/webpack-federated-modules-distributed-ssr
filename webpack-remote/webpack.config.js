@@ -8,9 +8,14 @@ const nodeExternals = require("webpack-node-externals");
 const { StatsWriterPlugin } = require("webpack-stats-plugin");
 const packageJsonDeps = require("./package.json").dependencies;
 
-const { parsed: env } = require("dotenv").config();
+// const { parsed: env } = require("dotenv").config();
 
-const REMOTE_URLS = JSON.parse(env.REMOTE_URLS);
+const env = {
+  PORT:3001,
+REMOTE_URLS:{ "webpackRemote2": "http://localhost:3003" }
+}
+
+const REMOTE_URLS = env.REMOTE_URLS;
 
 const REMOTES = Object.entries(REMOTE_URLS)
   .map(([name, entry]) => ({

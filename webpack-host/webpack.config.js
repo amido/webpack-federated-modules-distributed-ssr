@@ -4,9 +4,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 const packageJsonDeps = require("./package.json").dependencies;
-const { parsed: env } = require("dotenv").config();
+// const { parsed: env } = require("dotenv").config();
 
-const REMOTE_URLS = JSON.parse(env.REMOTE_URLS);
+const env = {
+  PORT:3002,
+  REMOTE_URLS:{ "webpackRemote": "http://localhost:3001", "webpackRemote2": "http://localhost:3003" }
+}
+const REMOTE_URLS = env.REMOTE_URLS;
 
 const REMOTES = Object.entries(REMOTE_URLS)
   .map(([name, entry]) => ({
