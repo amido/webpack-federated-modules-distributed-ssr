@@ -1,1 +1,1 @@
-export const REMOTE_URLS = JSON.parse(process.env.REMOTE_URLS);
+export const REMOTE_URLS={ "webpackRemote2": "http://localhost:3003" }
